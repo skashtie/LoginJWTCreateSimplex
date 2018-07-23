@@ -1,4 +1,10 @@
-﻿require('rootpath')();
+﻿/** */
+
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+/** */
+require('rootpath')();
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -25,8 +31,28 @@ const port = process.env.NODE_ENV === 'production' ? 80 : 4000;
 //     console.log('Server listening on port ' + port);
 // });
 
-const server = app.listen(port, '0.0.0.0', function() {
+/** */
+const options = {
+    pfx: fs.readFileSync('sagiCer.pfx'),
+    passphrase: 'o0JULgRqSMW52lhvKgie/W6BPmqGj28cpbrkGLBukeg='
+};
 
-    console.log('server fixed Listening to port:  ' + port);
+var httpServer = http.createServer(app);
+
+var httpsServer = https.createServer(options, app);
+
+
+
+
+/** */
+httpServer.listen(4005, '0.0.0.0', function() {
+
+    console.log('http server fixed Listening to port:  4005');
+
+});
+
+httpsServer.listen(4000, '0.0.0.0', function() {
+
+    console.log('https server fixed Listening to port:  4000');
 
 });

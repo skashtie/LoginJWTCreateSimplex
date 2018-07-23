@@ -14,13 +14,15 @@ module.exports = {
 };
 
 async function authenticate({ username, password }) {
-    console.log(' simplex server  service auoth activated');
+    const expirationDate = Math.floor(Date.now() / 1000) + 3 //+x seconds from now
 
     const user = await User.findOne({ username });
     if (user && bcrypt.compareSync(password, user.hash)) {
         const { hash, ...userWithoutHash } = user.toObject();
-        const token = jwt.sign({ sub: user.id }, config.secret);
-    console.log(' simplex server  service auoth activated end');
+        const token = jwt.sign({ sub: user.id }, config.secret, {
+            expiresIn: '120s' // expires in ....
+        });
+        console.log(' simplex server  service aut activated end token  ');
 
         return {
             ...userWithoutHash,
